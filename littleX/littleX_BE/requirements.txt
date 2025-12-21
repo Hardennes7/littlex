@@ -1,11 +1,2 @@
-byllm
-jaclang
-jac-cloud
-# openai
-#ollama
-pillow
-scikit-learn
-numpy
-# sentence_transformers
-python-dotenv
-requests
+﻿fastapi==0.104.1
+uvicorn[standard]==0.24.0

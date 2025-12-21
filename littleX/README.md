@@ -44,7 +44,13 @@ pip install -r littleX_BE/requirements.txt
 
 ### 3. Start the Backend Server
 ```bash
-jac serve littleX_BE/littleX.jac
+# Node backend (development)
+cd littleX_BE
+npm install
+npm run dev
+
+# Optional: set OpenAI API key in `littleX_BE/.env`:
+# OPENAI_API_KEY=sk-...
 ```
 ### 4. Run the Frontend Server
 Open another command line

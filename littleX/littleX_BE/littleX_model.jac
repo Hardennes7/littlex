@@ -29,3 +29,13 @@ edge group_membership {
 edge conversation_flow {
     has direction: str;
 }
+
+# 3. The Logic (The Hype Man)
+walker hype_man_pro {
+    has raw_text: str;
+
+    can polish_post with  entry {
+        # This takes the user's text and wraps it in "Hype" formatting instantly
+        report "🔥 VIRAL ALERT: " + self.raw_text + " 🚀 💯 #LittleX";
+    }
+}
