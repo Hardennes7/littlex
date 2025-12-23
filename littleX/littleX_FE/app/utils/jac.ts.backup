@@ -1,0 +1,53 @@
+﻿// app/utils/jac.ts
+// Fixed version - prevents server-side execution
+
+// We use 'globalThis' to prevent creating multiple instances during hot-reloads in Next.js
+const globalForJac = globalThis as unknown as { jac?: any };
+
+// Store the instance
+let jacInstance: any = null;
+let isInitializing = false;
+
+// Function to get JacClient (client-side only)
+export const getJacClient = async (): Promise<any> => {
+  // Only execute on the client side
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
+  // Return cached instance if available
+  if (globalForJac.jac) {
+    return globalForJac.jac;
+  }
+  
+  if (!jacInstance && !isInitializing) {
+    isInitializing = true;
+    try {
+      // Dynamically import ONLY on client side
+      const module = await import('jac-client');
+      const JacClient = module.JacClient || module.default;
+      
+      if (JacClient && typeof JacClient === 'function') {
+        jacInstance = new JacClient('http://localhost:8000');
+        
+        // Cache for development
+        if (process.env.NODE_ENV !== 'production') {
+          globalForJac.jac = jacInstance;
+        }
+      } else {
+        console.error('JacClient is not a constructor');
+      }
+    } catch (error) {
+      console.error('Failed to load JacClient:', error);
+    } finally {
+      isInitializing = false;
+    }
+  }
+  
+  return jacInstance;
+};
+
+// For backward compatibility - returns a promise
+export const jac = getJacClient();
+
+export default jac;
